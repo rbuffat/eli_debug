@@ -9,9 +9,10 @@ branches:
 
 script:
    - make check
-   - export CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $TRAVIS_COMMIT_RANGE)
+   - export CHANGED_FILES=$(git diff --name-only $TRAVIS_COMMIT_RANGE)
    - echo $CHANGED_FILES
-   - python scripts/check.py --strict $CHANGED_FILES
+   # We only execute strict tests if we have changed files
+   - [ -z "$CHANGED_FILES" ] && python scripts/check.py --strict $CHANGED_FILES
 
 before_deploy:
     - make clean
